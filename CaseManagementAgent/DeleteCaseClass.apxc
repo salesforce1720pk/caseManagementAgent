@@ -15,7 +15,7 @@ public with sharing class DeleteCaseClass {
         @InvocableVariable
         public String message;
     }
-
+    //This line of code might create problem, if so , remove it
     @InvocableMethod(
         label = 'Delete Case',
         description = 'Deletes Case records by Id'
@@ -66,3 +66,4 @@ public with sharing class DeleteCaseClass {
         return responses;
     }
 }
+
