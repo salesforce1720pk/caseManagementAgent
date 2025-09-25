@@ -16,14 +16,10 @@ public with sharing class UpdateCaseClass {
         public String caseNumber;
     }
 
-    @InvocableMethod(
-        label = 'Update Case Details',
-        description = 'Fetches record via Id and updates the required fields'
-    )
+   
     public static List<Response> updateCaseMethod(List<Request> requests) {
         List<Response> responses = new List<Response>();
 
-        // Collect Ids
         Set<Id> caseIds = new Set<Id>();
         for (Request r : requests) {
             if (r.caseId != null) {
@@ -31,14 +27,12 @@ public with sharing class UpdateCaseClass {
             }
         }
 
-        // Query existing Cases
         Map<Id, Case> caseMap = new Map<Id, Case>(
             [SELECT Id, Status, Origin, CaseNumber FROM Case WHERE Id IN :caseIds]
         );
 
         List<Case> casesToUpdate = new List<Case>();
 
-        // Update values
         for (Request r : requests) {
             Case c = caseMap.get(r.caseId);
             if (c != null) {
@@ -52,11 +46,9 @@ public with sharing class UpdateCaseClass {
             }
         }
 
-        // DML update
         if (!casesToUpdate.isEmpty()) {
             update casesToUpdate;
 
-            // Build response
             for (Case c : casesToUpdate) {
                 Response res = new Response();
                 res.caseNumber = c.CaseNumber;
