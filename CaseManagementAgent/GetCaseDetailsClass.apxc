@@ -20,7 +20,6 @@ public with sharing class GetCaseDetailsClass {
     public static List<Response> getCaseMethod(List<Request> requests) {
         List<Response> responseList = new List<Response>();
 
-        // Collect all Ids
         Set<Id> caseIds = new Set<Id>();
         for (Request req : requests) {
             if (req.caseId != null) {
@@ -28,12 +27,10 @@ public with sharing class GetCaseDetailsClass {
             }
         }
 
-        // Query in bulk
         Map<Id, Case> caseMap = new Map<Id, Case>(
             [SELECT Id, Status, Origin, CaseNumber FROM Case WHERE Id IN :caseIds]
         );
 
-        // Build responses
         for (Request req : requests) {
             Case c = caseMap.get(req.caseId);
             if (c != null) {
